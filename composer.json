@@ -12,15 +12,8 @@
     "autoload": {
         "psr-0": { "": "inc/" }
     },
-    "require": {},
-    "repositories": [],
     "scripts": {
         "post-install-cmd": ["Thin\\View::cleanCache"],
         "post-update-cmd": ["Thin\\View::cleanCache"]
-    },
-    "minimum-stability": "dev",
-    "extra": {
-        "thin-app-dir": "app",
-        "thin-web-dir": "web"
     }
 }
