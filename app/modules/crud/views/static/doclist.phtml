@@ -1,0 +1,56 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-list"></i> Liste des documents
+                    </header>
+                    <div class="panel-body">
+                        <a class="btn btn-primary" href="/crud/static/docadd"><i class="fa fa-plus"></i> Ajouter un document</a><br /><br />
+                        <?php if(count(view()->docs)): ?>
+                        <table class="table table-striped tablesorter table-bordered table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Propriétaire</th>
+                                    <th>Téléchargement</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach (view()->docs as $doc):
+                                $owner = auth($doc['owner'])->user()->assoc();
+                                ?>
+                                    <tr>
+                                        <td><?php view()->show($doc['name']); ?></td>
+                                        <td><?php view()->show($owner['firstname'] . ' ' . $owner['name']); ?></td>
+                                        <td><a target="_blank" class="btn btn-primary" href="<?php view()->show($doc['url']); ?>" rel="tooltip" title="Télécharger"><i class="fa fa-download"></i></a></td>
+                                        <td>
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <a rel="tooltip" title="éditer" href="/crud/static/docedit/id/<?php view()->show($doc['id']); ?>" class="btn btn-xs btn-success">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a rel="tooltip" title="supprimer" href="/crud/static/docdelete/id/<?php view()->show($doc['id']); ?>" class="btn btn-xs btn-danger">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?php else: ?>
+                            <div class="alert alert-info col-md-6 col-md-push-3 col-md-pull-3">
+                                Aucun document.
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

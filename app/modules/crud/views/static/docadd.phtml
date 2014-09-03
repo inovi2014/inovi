@@ -1,0 +1,40 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-list"></i> Ajouter un document
+                    </header>
+                    <div class="panel-body">
+                        <form method="POST" action="<?php echo context('url')->actual(); ?>" class="form-horizontal" enctype="multipart/form-data" role="form" id="crudForm">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
+                            <div class="form-group">
+                                <label for="name" class="col-md-2 col-sm-2 control-label">Nom</label>
+                                <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                    <input required type="text" name="name" id="name" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="url" class="col-md-2 col-sm-2 control-label">Document</label>
+                                <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                    <input required type="file" name="url" id="url" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-md-push-4 col-md-pull-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-square-o"></i> Valider
+                                    </button>
+                                    <button type="reset" class="btn btn-danger">
+                                        <i class="fa fa-undo"></i> Annuler
+                                    </button>
+                                </div>
+                            </div>
+                            <a href="/crud/static/doclist" class="btn btn-success"><i class="fa fa-list"></i> Retour à la liste</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

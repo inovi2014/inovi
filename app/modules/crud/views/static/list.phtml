@@ -1,0 +1,137 @@
+@@layout('main')
+    <script type="text/javascript">
+        var searchCrud = '';
+    </script>
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-list"></i> Liste des <?php echo view()->plural; ?>
+                    </header>
+                    <div class="panel-body">
+                        <input type="hidden" id="indexCrudFieldSearch" value="0" />
+                        <?php echo view()->search; ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <a href="/crud/static/create/table/<?php echo request()->getTable(); ?>">
+                                        <button id="addCrudItem" type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i> Ajouter <?php echo view()->singular; ?>
+                                        </button>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <?php if (count(view()->foreigns)): ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="list-inline">
+                                        <?php foreach (view()->foreigns as $foreign): ?>
+                                            <?php
+                                                $infos = isAke(view()->fieldsInfos, $foreign);
+                                                $label = isAke($infos, 'label', repl('_id', '', $foreign));
+                                            ?>
+                                            <li style="padding-top: 15px;"><a class="btn btn-warning" href="/crud/static/create/table/<?php echo repl('_id', '', $foreign); ?>" target="_blank"><i class="fa fa-plus"></i> Ajouter <?php view()->show($label); ?></a></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php echo view()->list; ?>
+                        <div class="row">
+                            <div>
+                                <ul class="list-inline">
+                                    <li class="label label-info">Export</li>
+                                    <li><img alt="Export PDF" rel="tooltip" title="Export PDF" src="/crud/assets/img/pdf.png" style="cursor: pointer;" onclick="alert('L\'export PDF prend quelques secondes, merci de patienter.'); crudExport('pdf');" /></li>
+                                    <li><img alt="Export Excel" rel="tooltip" title="Export Excel" src="/crud/assets/img/excel.png" style="cursor: pointer;" onclick="crudExport('excel');" /></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function orderGoPage(field, direction)
+        {
+            $('#crud_order').val(field);
+            $('#crud_order_direction').val(direction);
+            $('#crud_type_export').val('');
+            $('#crud_page').val(1);
+            $('#listForm').submit();
+        }
+
+        function paginationGoPage(page)
+        {
+            $('#crud_page').val(parseInt(page));
+            $('#crud_type_export').val('');
+            $('#listForm').submit();
+        }
+
+        function crudExport(typeExport)
+        {
+            $('#crud_type_export').val(typeExport);
+            $('#listForm').submit();
+        }
+
+        function makeCrudSearch()
+        {
+            $('#listForm').action = document.URL;
+            $('#crud_page').val(1);
+            for (var i = 0 ; i <= numFieldsSearch ; i++) {
+                var field = searchFields[i];
+                var searchValue = $('#crudSearchValue_' + i).val();
+                if (searchValue.length > 0 && searchValue != 'crudNothing') {
+                    var operator = $('#crudSearchOperator_' + i).val();
+                    if (operator == 'LIKE' || operator == 'NOT LIKE') {
+                        searchValue = '%' + searchValue + '%';
+                    } else if (operator == 'START') {
+                        operator = 'LIKESTART';
+                        searchValue = searchValue + '%';
+                    } else if (operator == 'END') {
+                        operator = 'LIKEEND';
+                        searchValue = '%' + searchValue;
+                    }
+                    var query = field + '%%' + operator + '%%' + "'" + searchValue + "'" + '##';
+                    searchCrud += query;
+                }
+            }
+            $('#crud_where').val(searchCrud);
+            $('#crud_type_export').val('');
+            $('#listForm').submit();
+        }
+
+        function addRowSearch(field, from)
+        {
+            var indexCrudFieldSearch = parseInt($('#indexCrudFieldSearch').val());
+            if (indexCrudFieldSearch < 1) {
+                numFieldsSearch = indexCrudFieldSearch = parseInt(numFieldsSearch) + 1;
+            }
+
+            var nextIndex = indexCrudFieldSearch++;
+            searchFields.push(field);
+            var html = '<hr id="' + nextIndex + '_hr" /><div class="controls" id="crudControl_' + nextIndex + '">';
+            html += $('#crudControl_' + from).html();
+            html += '</div>';
+            var firstRegexp = new RegExp("_" + from, "g");
+            html = html.replace(firstRegexp, "_" + nextIndex);
+            html = html.split(from + ")").join(nextIndex + ')');
+            if (!html.match('fa-trash-o')) {
+                var strFind = '<i class="fa fa-plus"></i></span>';
+                var strReplace = '<i class="fa fa-plus"></i></span>&nbsp;&nbsp;<span class="btn btn-danger" href="#" onclick="delRowSearch(' + nextIndex + '); return false;"><i class="fa fa-trash-o"></i></a>';
+
+                html = html.split(strFind).join(strReplace);
+            }
+
+            $('#crudControl_' + from).after("\n\n\t\t" + html);
+        }
+
+        function delRowSearch(index)
+        {
+            $('#crudControl_' + index).slideUp();
+            $('#' + index + '_hr').slideUp();
+            $('#crudSearchValue_' + index).val('crudNothing');
+        }
+    </script>

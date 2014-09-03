@@ -1,0 +1,53 @@
+#!/usr/bin/php
+<?php
+    namespace Thin;
+
+    set_time_limit(false);
+
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'init.php';
+    require_once APPLICATION_PATH . DS . 'Bootstrap.php';
+
+    $args   = Cli::args($argv);
+
+    $env    = isAke($args, 'env', 'production');
+    Config::set('application.env', $env);
+
+    $task   = isAke($args, 'task', null);
+    $action = isAke($args, 'action', 'boot');
+    $tasks  = Cli::tasks();
+
+    if (is_null($task)) {
+        Cli::show('You need to provide a task to execute.', 'ERROR');
+        Cli::show("Tasks list", 'COMMENT');
+        Cli::show(implode("\n", $tasks));
+        exit;
+    }
+
+    if (!Arrays::in($task, $tasks)) {
+        Cli::show('You need to provide a valid task to execute because "' . $task . '" does not exist.', 'ERROR');
+        Cli::show("Tasks list", 'COMMENT');
+        Cli::show(implode("\n", $tasks));
+        exit;
+    }
+
+    Bootstrap::cli();
+
+    $class = '\\ThinTask\\' . $task;
+
+    unset($args['env']);
+    unset($args['task']);
+    unset($args['action']);
+
+    /* Check if method exists */
+    $methods = get_class_methods($class);
+
+
+    if (!Arrays::in($action, $methods)) {
+        Cli::show('You need to provide a valid method to call in "' . $task . '" class, because method "' . $action . '" does not exist.', 'ERROR');
+        exit;
+    }
+
+    $start = Timer::start();
+    call_user_func_array(array($class, $action), $args);
+    Timer::stop();
+    Cli::show("Execution time of task '$task' ==> " . Timer::get() . " s.");

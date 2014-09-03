@@ -1,0 +1,32 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-copy"></i> Afficher - <?php echo view()->singular; ?>
+                    </header>
+                    <div class="panel-body">
+                        <?php foreach(view()->fields as $field): ?>
+                            <?php if ($field == view()->pk) continue; ?>
+                            <?php $settings  = isAke(view()->fieldsInfos, $field);
+                                $closure     = isAke($settings, 'content_list', false);
+                                $label       = isAke($settings, 'label', ucfirst($field));
+                                $readable    = isAke($settings, 'is_readable', true);
+                                $value       = isAke(view()->row, $field, ' ');
+                                if (!$readable) continue;
+
+                                $value = (false === $closure || !is_callable($closure)) ? isAke(view()->row, $field, ' ') : call_user_func_array($closure, array(view()->row));
+                            ?>
+                            <legend><?php echo $label; ?></legend>
+                            <pre class="prettyprint"><?php echo \Thin\Html\Helper::display($value); ?></pre>
+                            <p />
+                        <?php endforeach; ?>
+                            <a href="#" class="btn btn-primary" onclick="window.print(); return false;"><i class="fa fa-print"></i></a>
+                            <a href="/crud/static/update/table/<?php echo request()->getTable(); ?>/id/<?php echo request()->getId(); ?>" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                            <a href="/crud/static/list/table/<?php echo request()->getTable(); ?>" class="btn btn-success"><i class="fa fa-list"></i> Retour à la liste</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,169 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-copy"></i> Dupliquer - <?php echo view()->singular; ?>
+                    </header>
+                    <div class="panel-body">
+                        <form method="POST" action="<?php echo context('url')->actual(); ?>" class="form-horizontal" enctype="multipart/form-data" role="form" id="crudForm">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
+                            <?php foreach(view()->fields as $field): ?>
+                            <?php if ($field == view()->pk) continue; ?>
+                            <?php $settings  = isAke(view()->fieldsInfos, $field);
+                                $helper      = isAke($settings, 'helper', false);
+                                $closure     = isAke($settings, 'content_create', false);
+                                $required    = isAke($settings, 'required', true);
+                                $label       = isAke($settings, 'label', ucfirst($field));
+                                $placeholder = isAke($settings, 'placeholder', '');
+                                $inputType   = isAke($settings, 'form_type', 'text');
+                                $addable     = isAke($settings, 'is_creatable', true);
+
+                                $inputType   = $field == 'email' && $inputType == 'text' ? 'email' : $inputType;
+                                if (!$addable) continue;
+                            ?>
+                            <?php if (false === $closure || !is_callable($closure)): ?>
+                            <?php if ('hidden' == $inputType): ?>
+                                <input name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" value="<?php view()->show(view()->row->$field); ?>" type="hidden">
+                            <?php endif; ?>
+                            <?php if ('text' == $inputType || 'email' == $inputType || 'password' == $inputType): ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <input <?php if(true === $required): ?>required <?php endif; ?>class="form-control" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>" value="<?php view()->show(view()->row->$field); ?>" type="<?php view()->show($inputType); ?>">
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                        <?php if (substr($field, -3) == '_id'): ?>
+                                        <p>
+                                            <br /><br/><?php if(strlen(view()->row->$field)): ?><a class="btn btn-primary btn-small" target="_blank" href="/crud/json/update/table/<?php echo substr($field, 0, -3); ?>/id/<?php view()->show(view()->row->$field); ?>">
+                                                <i class="fa fa-edit"></i>
+                                            </a><?php endif; ?>
+                                            <a class="btn btn-success btn-small" target="_blank" href="/crud/json/create/table/<?php echo substr($field, 0, -3); ?>">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ('date' == $inputType):
+                            $dateFormat    = isAke($settings, 'date_format', 'dd/mm/yyyy');
+                            ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <input <?php if(true === $required): ?>required <?php endif; ?>class="form-control crudDate" data-date-format="<?php view()->show($dateFormat); ?>" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>" value="<?php view()->show(view()->row->$field); ?>" type="<?php view()->show($inputType); ?>">
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ('file' == $inputType): ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <input <?php if(true === $required): ?>required <?php endif; ?>class="form-control" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>" type="<?php view()->show($inputType); ?>">
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                        <?php if (strlen(view()->row->$field)): ?>
+                                            <p><br /><br /><a class="btn btn-small btn-warning" href="<?php view()->show(view()->row->$field); ?>" target="_blank"><i class="fa fa-download"></i></a></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ('image' == $inputType): ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <input <?php if(true === $required): ?>required <?php endif; ?>class="form-control" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>" type="<?php view()->show($inputType); ?>">
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                        <?php if (strlen(view()->row->$field)): ?>
+                                            <p><br /><br /><a class="btn btn-small btn-warning" href="<?php view()->show(view()->row->$field); ?>" target="_blank"><img src="<?php view()->show(view()->row->$field); ?>" style="max-height: 200px; max-width: 200px;"></a></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ('textarea' == $inputType): ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <textarea <?php if(true === $required): ?>required <?php endif; ?>class="form-control" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>"><?php view()->show(view()->row->$field); ?></textarea>
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ('html' == $inputType): ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <textarea rows="6" <?php if(true === $required): ?>required <?php endif; ?>class="form-control thinWysiwyg" name="<?php view()->show($field); ?>" id="<?php view()->show($field); ?>" placeholder="<?php view()->show($placeholder); ?>"><?php view()->show(view()->row->$field); ?></textarea>
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php else: ?>
+                                <div class="form-group">
+                                    <label for="<?php view()->show($field); ?>" class="col-md-2 col-sm-2 control-label"><?php view()->show($label); ?></label>
+                                    <div class="col-md-6 col-md-push-2 col-md-pull-2">
+                                        <?php
+                                            $value = call_user_func_array($closure, array(view()->row, $required));
+                                            view()->show(view()->compile($value));
+                                        ?>
+                                        <?php if (false !== $helper): ?>
+                                        <p class="help-block">
+                                            <?php view()->show($helper); ?>
+                                        </p>
+                                        <?php endif; ?>
+                                        <?php if (substr($field, -3) == '_id'): ?>
+                                        <p>
+                                            <br /><br/><?php if(strlen(view()->row->$field)): ?><a class="btn btn-primary btn-small" target="_blank" href="/crud/json/update/table/<?php echo substr($field, 0, -3); ?>/id/<?php view()->show(view()->row->$field); ?>">
+                                                <i class="fa fa-edit"></i>
+                                            </a><?php endif; ?>
+                                            <a class="btn btn-success btn-small" target="_blank" href="/crud/json/create/table/<?php echo substr($field, 0, -3); ?>">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                            <div class="form-group">
+                                <div class="col-md-4 col-md-push-4 col-md-pull-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-square-o"></i> Valider
+                                    </button>
+                                    <button type="reset" class="btn btn-danger">
+                                        <i class="fa fa-undo"></i> Annuler
+                                    </button>
+                                </div>
+                            </div>
+                            <a href="/crud/json/list/table/<?php echo request()->getTable(); ?>" class="btn btn-success"><i class="fa fa-list"></i> Retour à la liste</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

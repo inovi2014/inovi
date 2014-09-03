@@ -1,0 +1,50 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-list"></i> Liste des pages
+                    </header>
+                    <div class="panel-body">
+                        <a class="btn btn-primary" href="/crud/static/addpage"><i class="fa fa-plus"></i> Ajouter une page</a><br /><br />
+                        <table class="table table-striped tablesorter table-bordered table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Fichier</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $id = 1; foreach ($v->pages as $type => $pages):
+                                    $prefix = $type == 'page' ? $v->prefixPage : $v->prefixPartial;
+                                ?>
+                                    <?php foreach ($pages as $page): ?>
+                                    <tr>
+                                        <td><?php $e($type); ?></td>
+                                        <td><?php $e(repl($prefix, '', $page)); ?></td>
+                                        <td>
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <a rel="tooltip" title="éditer" href="/crud/static/editpage/id/<?php $e($id); ?>" class="btn btn-xs btn-success">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a rel="tooltip" title="supprimer" href="/crud/static/deletepage/id/<?php $e($id); ?>" class="btn btn-xs btn-danger">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                <?php $id++; endforeach; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

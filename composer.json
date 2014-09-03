@@ -1,0 +1,26 @@
+{
+    "name": "inovi2014/inovi",
+    "description": "Inovi php thin app",
+    "license": "AGPL-3.0",
+    "authors": [
+      {
+          "name": "Gerald Plusquellec",
+          "email": "gplusquellec@gmail.com",
+          "role": "Developer"
+      }
+    ],
+    "autoload": {
+        "psr-0": { "": "inc/" }
+    },
+    "require": {},
+    "repositories": [],
+    "scripts": {
+        "post-install-cmd": ["Thin\\View::cleanCache"],
+        "post-update-cmd": ["Thin\\View::cleanCache"]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "thin-app-dir": "app",
+        "thin-web-dir": "web"
+    }
+}

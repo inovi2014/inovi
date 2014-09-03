@@ -1,0 +1,53 @@
+@@layout('main')
+    <div class="wrapper">
+        <form method="POST" class="form-signin" action="/crud/static/login">
+            <div class="form-signin-heading text-center">
+                <?php if (true === view()->error): ?>
+                    <div class="alert alert-danger">
+                        Mauvaise identification
+                    </div>
+                <?php endif; ?>
+                <h1 class="sign-title">
+                    Connexion
+                </h1>
+                <i class="fa fa-user fa-3x"></i>
+            </div>
+            <div class="login-wrap">
+                <input type="hidden" name="url" value="<?php echo url()->actual(); ?>">
+                <input name="username" required type="text" class="form-control" placeholder="Identifiant" autofocus>
+                <input name="password" required type="password" class="form-control" placeholder="Mot de passe">
+
+                <button class="btn btn-lg btn-login btn-block" type="submit">
+                    <i class="fa fa-check"></i>
+                </button>
+                <label class="checkbox">
+                    <span class="pull-right">
+                        <a data-toggle="modal" href="#lost"> Identifiants égarés ?</a>
+                    </span>
+                </label>
+            </div>
+        </form>
+
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="lost" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Identifiants égarés ?</h4>
+                    </div>
+                    <form method="POST" action="/crud/static/lost">
+                    <div class="modal-body">
+                        <p>Merci de renseigner votre courriel.</p>
+                        <input type="email" name="email" placeholder="Courriel" autocomplete="off" class="form-control placeholder-no-fix">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Annuler</button>
+                        <button class="btn btn-primary" type="submit">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal -->
+    </div>

@@ -1,0 +1,20 @@
+/*
+    $template = 'page';
+    $title = 'Liste des produits';
+    $products = jmodel('option')->fetch()->order('name')->exec();
+*/
+<div id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {{ if(count($products)): }}
+                    <ul class="list-unstyled">
+                    {{ foreach ($products as $product): }}
+                        <li><a class="btn btn-primary" href="/product/{{ $e(Thin\Inflector::slug($product['name'], '_')); }}-{{ $e($product['id']); }}">{{ $e($product['name']); }}</a></li>
+                    {{ endforeach; }}
+                    </ul>
+                {{ endif; }}
+            </div>
+        </div>
+    </div>
+</div>

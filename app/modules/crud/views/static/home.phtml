@@ -1,0 +1,47 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                        <i class="fa fa-list"></i> Items
+                        <span class="tools pull-right">
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                            <a href="javascript:;" class="fa fa-times"></a>
+                        </span>
+                    </header>
+                    <div class="panel-body">
+                        <?php if (!count(view()->items)): ?>
+                            Aucun item à administrer.
+                        <?php else: ?>
+                            <ul class="list-unstyled">
+                                <?php foreach (view()->items as $item => $info): ?>
+                                <li><a href="/crud/static/list/table/<?php echo $item; ?>"><?php echo $info['plural']; ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php if (true === auth()->is('admin')): ?>
+            <div class="col-md-6">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                        <i class="fa fa-cogs"></i> Admin
+                        <span class="tools pull-right">
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                            <a href="javascript:;" class="fa fa-times"></a>
+                        </span>
+                    </header>
+                    <div class="panel-body">
+                        <ul class="list-unstyled">
+                            <li><a href="/crud/static/userlist">Gestion des utilisateurs</a></li>
+                            <li><a href="/crud/static/usersrights">Droits par utilisateur</a></li>
+                            <li><a href="/crud/static/itemsrights">Droits par item</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>

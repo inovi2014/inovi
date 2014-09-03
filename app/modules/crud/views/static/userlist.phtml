@@ -1,0 +1,58 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-list"></i> Liste des utilisateurs
+                    </header>
+                    <div class="panel-body">
+                        <a class="btn btn-primary" href="/crud/static/adduser"><i class="fa fa-plus"></i> Ajouter un utilisateur</a><br /><br />
+                        <table class="table table-striped tablesorter table-bordered table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Identifiant</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach (view()->users as $user): ?>
+                                    <tr>
+                                        <td><?php view()->show($user['username']); ?></td>
+                                        <td><?php view()->show($user['name']); ?></td>
+                                        <td><?php view()->show($user['firstname']); ?></td>
+                                        <td><?php view()->show($user['email']); ?></td>
+                                        <td>
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <a rel="tooltip" title="éditer" href="/crud/static/edituser/id/<?php view()->show($user['id']); ?>" class="btn btn-xs btn-success">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a rel="tooltip" title="supprimer" href="/crud/static/deleteuser/id/<?php view()->show($user['id']); ?>" class="btn btn-xs btn-danger">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </li>
+                                                <?php $a = auth($user['id']); ?>
+                                                <?php if (!$a->is('admin')): ?>
+                                                <li>
+                                                    <a rel="tooltip" title="Donner les droits admin" href="/crud/static/makeadmin/id/<?php view()->show($user['id']); ?>" class="btn btn-xs btn-primary">
+                                                        <i class="fa fa-cogs"></i>
+                                                    </a>
+                                                </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

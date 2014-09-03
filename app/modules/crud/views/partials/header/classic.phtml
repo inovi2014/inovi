@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Admin">
+    <meta name="author" content="Gerald Plusquellec">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>Admin - <?php echo view()->title; ?></title>
+
+    <!--pickers css-->
+    <link rel="stylesheet" type="text/css" href="/crud/assets/js/bootstrap-datepicker/css/datepicker-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/crud/assets/js/bootstrap-timepicker/css/timepicker.css" />
+    <link rel="stylesheet" type="text/css" href="/crud/assets/js/bootstrap-colorpicker/css/colorpicker.css" />
+    <link rel="stylesheet" type="text/css" href="/crud/assets/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" type="text/css" href="/crud/assets/js/bootstrap-datetimepicker/css/datetimepicker-custom.css" />
+
+    <link href="/crud/assets/css/style.css" rel="stylesheet">
+    <link href="/crud/assets/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/crud/assets/js/html5shiv.js"></script>
+    <script src="/crud/assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            theme: "modern",
+            mode : "specific_textareas",
+            editor_selector : "thinWysiwyg",
+            relative_urls: false,
+            width: 600,
+            height: 350,
+            plugins: [
+                 "code advlist autolink link lists charmap print preview hr anchor pagebreak",
+                 "searchreplace wordcount visualblocks visualchars insertdatetime nonbreaking",
+                 "table contextmenu directionality emoticons paste textcolor responsivefilemanager thin image media"
+           ],
+           toolbar1: "thin | undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect fontselect",
+           toolbar2: "| responsivefilemanager | emoticons link unlink anchor | forecolor backcolor  | print preview",
+           image_advtab: true ,
+
+           external_filemanager_path: "/crud/assets/editor/filemanager/",
+           filemanager_title: "Gestion media" ,
+           external_plugins: {
+            "responsivefilemanager" : "/crud/assets/editor/js/plugin.js",
+            "thin" : "/crud/assets/plugins/thin.js"
+        }
+        });
+    </script>
+</head>
+
+<body class="horizontal-menu-page">
+
+<section>
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#crudMenu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="customColor navbar-brand" href="/crud/static/home">
+                    <i class="fa fa-home fa-2x"></i>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <?php if (true === view()->isAuth): ?>
+            <div class="collapse navbar-collapse" id="crudMenu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle openHover" data-toggle="dropdown">
+                        <i class="fa fa-list"></i> Items <b class="caret"></b>
+                        </a>
+                        <?php if (count(view()->items)): ?>
+                        <ul class="dropdown-menu">
+                            <?php foreach (view()->items as $item => $info): ?>
+                            <li><a href="/crud/static/list/table/<?php echo $item; ?>"><?php echo $info['plural']; ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
+                    </li>
+                    <li><a href="/crud/static/doclist"><i class="fa fa-file-text"></i> Documents</a></li>
+                    <?php if (true === auth()->is('admin')): ?>
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle openHover" data-toggle="dropdown">
+                        <i class="fa fa-cogs"></i> Admin <b class="caret"></b>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/crud/static/userlist"><i class="fa fa-group"></i> Gestion des utilisateurs</a></li>
+                                <li><a href="/crud/static/usersrights"><i class="fa fa-user"></i> Droits par utilisateur</a></li>
+                                <li><a href="/crud/static/itemsrights"><i class="fa fa-th-list"></i> Droits par item</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a rel="tooltip" title="Afficher le site" target="_site" href="<?php view()->show(URLSITE); ?>"><i class="fa fa-external-link"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle openHover" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> <?php echo view()->user->getFirstname(); ?> <?php echo view()->user->getName(); ?> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/crud/static/logout"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+            <?php endif; ?>
+        </div><!-- /.container-fluid -->
+    </nav>

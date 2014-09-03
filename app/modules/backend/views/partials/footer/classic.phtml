@@ -1,0 +1,28 @@
+        <div class="footer">
+        sss
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <script src="<?php echo container()->getUrlsite(); ?>assets/js/backend/js.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.openHover').dropdownHover().dropdown();
+                $('[rel=tooltip]').tooltip({
+                    placement: 'bottom'
+                });
+                $('[rel=tooltip-b]').tooltip({
+                    placement: 'bottom'
+                });
+                $('[rel=tooltip-t]').tooltip({
+                    placement: 'top'
+                });
+                $('[rel=tooltip-l]').tooltip({
+                    placement: 'left'
+                });
+                $('[rel=tooltip-r]').tooltip({
+                    placement: 'right'
+                });
+            });
+        </script>
+    </body>
+</html>

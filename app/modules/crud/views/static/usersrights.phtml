@@ -1,0 +1,61 @@
+@@layout('main')
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1 col-md-pull-1">
+                <div class="panel">
+                    <header class="panel-heading dark">
+                    <i class="fa fa-group"></i> Droits par utilisateur
+                    </header>
+                    <div class="panel-body">
+                    <?php if (!count(view()->users)): ?>
+                        <div class="alert alert-info col-md-4 coll-md-push-4 coll-md-pull-4">
+                            Aucun utlisateur.
+                        </div>
+                    <?php else: ?>
+                        <table class="table table-striped tablesorter table-bordered table-condensed table-hover">
+                        <?php foreach (view()->users as $user): ?>
+                            <?php $userAuth = auth($user['id']); ?>
+                            <thead>
+                                <tr>
+                                    <th><a name="item<?php echo $user['id']; ?>"></a><?php view()->show($user['firstname'] . ' ' . $user['name'] ); ?></th>
+                                    <td colspan="7">
+                                        <a class="btn btn-xs btn-success" href="/crud/static/allrights/user/<?php echo $user['id']; ?>/action/can">
+                                        <i class="fa fa-check"></i> Donner tous les droits</a>
+                                        <a class="btn btn-xs btn-danger" href="/crud/static/allrights/user/<?php echo $user['id']; ?>/action/cannot"><i class="fa fa-ban"></i> Supprimer tous les droits</a>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>Lister</td>
+                                    <td>Afficher</td>
+                                    <td>Créer</td>
+                                    <td>Dupliquer</td>
+                                    <td>MAJ</td>
+                                    <td>Supprimer</td>
+                                    <td>Exporter</td>
+                                </tr>
+                                <?php foreach (view()->items as  $item => $info): ?>
+                                <tr>
+                                    <td><?php view()->show($item); ?></td>
+                                    <?php foreach (view()->permissions as  $perm):
+                                        $permission = $item . '_' . $perm;
+                                        $can = $userAuth->can($permission) || $userAuth->is('admin');
+                                        $link = $can ? '/crud/static/permission/user/' . $user['id'] . '/action/cannot/table/' . $item . '/right/' . $perm : '/crud/static/permission/user/' . $user['id'] . '/action/can/table/' . $item . '/right/' . $perm;
+                                        $ico = !$can ? '<i class="fa fa-ban"></i>' : '<i class="fa fa-check"></i>';
+                                        $class = !$can ? 'danger' : 'success';
+                                    ?>
+                                    <td><a class="btn btn-<?php echo $class; ?> btn-xs" href="<?php echo $link; ?>"><?php echo $ico; ?></a></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        <?php endforeach; ?>
+                        </table>
+                    <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

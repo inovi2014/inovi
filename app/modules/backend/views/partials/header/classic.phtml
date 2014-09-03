@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title><?php echo view()->title; ?></title>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://fonts.googleapis.com/css?family=Oswald:400,300,700|Montserrat:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="<?php echo container()->getUrlsite(); ?>assets/css/backend/style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <section id="header">
+            <nav class="navbar navbar-default navbar-embossed navbar-fixed-top" role="navigation" id="topNav">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle customColor" data-toggle="collapse" data-target="#menu">
+                        <span class="fui-list"></span>
+                    </button>
+                    <a class="navbar-brand" href="<?php echo container()->getUrlsite(); ?>backend">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </div>
+                <?php if (true === view()->isLogged): ?>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="nav navbar-nav">
+                        <li class="active dropdown">
+                            <a href="http://databasedapp.com/personal/demo/index.php/db" class="dropdown-toggle openHover" data-toggle="dropdown"><span class="fui-list"></span> customers <b class="caret"></b></a>
+                            <span class="dropdown-arrow dropdown-arrow-inverse"></span>
+                            <ul class="dropdown-menu dropdown-inverse">
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/customers">customers</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/employees">employees</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/offices">offices</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/orderdetails">orderdetails</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/orders">orders</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/payments">payments</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/productlines">productlines</a>
+                                </li>
+                                <li>
+                                    <a href="http://databasedapp.com/personal/demo/index.php/db/products">products</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li ><a href="http://databasedapp.com/personal/demo/index.php/users"><span class="fui-user"></span> Users</a></li>
+                        <li ><a href="http://databasedapp.com/personal/demo/index.php/roles"><span class="fui-myspace"></span> Roles &amp; permissions</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle openHover" data-toggle="dropdown">Hi, Admin <b class="caret"></b></a>
+                            <span class="dropdown-arrow dropdown-arrow-inverse"></span>
+                            <ul class="dropdown-menu dropdown-inverse">
+                                <li><a href="http://databasedapp.com/personal/demo/index.php/account">My Account</a></li>
+                                <li class="divider"></li>
+                                <li><a href="http://databasedapp.com/personal/demo/index.php/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="<?php echo container()->getUrlsite(); ?>backend/logout"><span class="visible-sm visible-xs">Logout<span class="fui-exit"></span></span><span class="visible-md visible-lg"><span class="fui-exit"></span></span></a>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+                <?php endif; ?>
+            </nav><!-- /navbar -->
+        </section><!-- /header -->
